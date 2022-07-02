@@ -14,22 +14,19 @@ return lastNameA.toLowerCase() > lastNameB.toLowerCase() ? 1 : -1;
 //it returns objects sorted by alphabetically (descending) by account.last
 
 function getTotalNumberOfBorrows(account, books) {
-  // create a variable for the id in account using destructuring
-    const {
-        id: accountId
-    } = account;
-  // use the reduce method on books, to accumulate total bumber of borrows.
-    return books.reduce((accumulator, book) => {
-  // creating a callback function
-      return (
-            accumulator +
-            book.borrows
-  // useing filter () to create a new array that only includes borrows that have the same id as the account id 
-            .filter(borrow => borrow.id === accountId)
-  // use the reduce method to add 1 for each item in the filtered array?
-            .reduce((accumulatorBorrows, borrow) => accumulatorBorrows + 1, 0)
-        );
-    }, 0);
+  let count = 0;
+  // look at each book, filter the array to only be the id we're looking at, add array length to count
+  books.forEach(book => {
+    const borrowedById = borrowsById(book, account);
+    //use borrowedByID helper function
+    count += borrowedById.length;
+  });
+  return count;
+}
+
+//Helper function used above
+function borrowsById (book, {id}) {
+  return book.borrows.filter(borrow => borrow.id === id);
 }
 
 /*takes in two pre-defined parameters in the following order...
